@@ -28,9 +28,7 @@ module sqrt(
   output [1:0] busy_o,
   output reg [3:0] y_o 
 );
-  localparam IDLE = 2'b00;
-  localparam Y_WORK = 2'b01;
-  localparam X_WORK = 2'b10;
+  localparam IDLE = 2'b00, Y_WORK = 2'b01, X_WORK = 2'b10;
   reg [6:0] m,y,b;
   reg [7:0] x;
   wire x_above_b,end_step;

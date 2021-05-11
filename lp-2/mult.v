@@ -29,8 +29,7 @@ module mlt(
   output busy_o,
   output reg [23:0] y_bo 
 );
-  localparam IDLE = 1'b0;
-  localparam WORK = 1'b1;
+  localparam IDLE = 1'b0, WORK = 1'b1;
   reg [2:0] ctr;
   wire [2:0] end_step;
   wire [7:0] part_sum;

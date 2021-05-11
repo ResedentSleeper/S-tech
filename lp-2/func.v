@@ -29,8 +29,7 @@ module func(
 	output busy_o,
 	output reg [23:0] y_o 
 );
-  localparam IDLE = 1'b0;
-  localparam WORK = 1'b1;
+  localparam IDLE = 1'b0, WORK=1'b1;
   wire [1:0] busy_cube, busy_sqrt;
   reg start_cube,start_sqrt,state;
   reg [23:0] part_result;
@@ -57,8 +56,8 @@ module func(
 	.y_bo(result_sqrt)
   );
   
-  assign busy_o=state;
-  assign done= (busy_sqrt==0 && busy_cube==0 && (result_cube!=0 && a!=0 || result_cube==0 && a==0) && (result_sqrt!=0 && b!=0 || result_sqrt==0 && b==0);  
+  assign busy_o = state;
+  assign done = (busy_sqrt==0 && busy_cube==0 && (result_cube!=0 && a!=0 || result_cube==0 && a==0) && (result_sqrt!=0 && b!=0 || result_sqrt==0 && b==0);  
   
   always @(posedge clk_i)
     if (rst_i) begin
@@ -82,10 +81,14 @@ module func(
 			end
 	  endcase
     end   
- always @(busy_cube) begin
-	if (busy_cube) start_cube <= 0;
+ always @(posedge clk_i) begin
+	if (busy_cube) begin
+		start_cube <= 0;
+	end
  end
- always @(busy_sqrt) begin
-	if (busy_sqrt) start_sqrt <= 0;
+ always @(posedge clk_i) begin
+	if (busy_sqrt) begin
+		start_sqrt <= 0;
+	end
  end
 endmodule

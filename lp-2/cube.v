@@ -28,15 +28,14 @@ module cube (
   output [1:0] busy_o,
   output reg [23:0] y_bo 
 );
-  localparam IDLE = 2'b00;
-  localparam FIRST_WORK = 2'b01;
-  localparam SECOND_WORK = 2'b10;
+  localparam IDLE = 2'b00, FIRST_WORK = 2'b01, SECOND_WORK = 2'b10;
   reg [15:0] a;
   reg [7:0] b;
   wire [23:0] result;
   wire mult_busy;
   reg[ [1:0] state;
   reg start;
+  reg start_end;
   
   assign busy_o=state;
   
@@ -61,29 +60,40 @@ module cube (
 				if (x_bi==0) begin
 					y_bo <= 0;
 				end else begin
-					state <= WORK;
+					state <= FIRST_WORK;
 					a <= {8'b0,x_bi};
 					b <= x_bi;
 					start <= 1;
+					start_end <= 0;
+				end
+			end
+		FIRST_WORK:
+			begin
+				if (start_end==0) begin
+					start_end <= 1;
+				end else begin
+					start <= 0;
+				end
+				if (mult_busy==0 && start==0) begin
+					state <= SECOND_WORK;
+					a <= result[15:0];
+					b <= x_bi;
+					start <= 1;
+					start_end <= 0;
+				end
+			end
+		SECOND_WORK:
+			begin
+				if (start_end==0) begin
+					start_end <= 1;
+				end else begin
+					start <= 0;
+				end
+				if (mult_busy==0 && start==0) begin
+                    state <= IDLE;
+                    y_bo <= result;
 				end
 			end
 	  endcase
     end
-  always @(result) 
-    begin
-        start <= 0;
-        case (state)
-            WORK:
-                begin
-                    state <= MULT_WORK;
-                    a <= result[15:0];
-                    start <= 1;
-                end  
-            MULT_WORK:
-                begin
-                    state <= IDLE;
-                    y_bo <= result;
-                end    
-        endcase
-    end    
 endmodule
