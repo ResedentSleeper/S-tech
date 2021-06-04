@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 04/07/2021 02:32:11 PM
+// Create Date: 04.06.2021 14:01:50
 // Design Name: 
 // Module Name: cube
 // Project Name: 
@@ -33,7 +33,7 @@ module cube (
   reg [7:0] b;
   wire [23:0] result;
   wire mult_busy;
-  reg[ [1:0] state;
+  reg [1:0] state;
   reg start;
   reg start_end;
   

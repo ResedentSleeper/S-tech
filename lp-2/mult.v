@@ -1,26 +1,6 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 04/07/2021 02:09:58 PM
-// Design Name: 
-// Module Name: mult
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
-
-module mlt(
+module mult(
   input clk_i,
   input rst_i,
   input [15:0] a_bi,
@@ -32,15 +12,16 @@ module mlt(
   localparam IDLE = 1'b0, WORK = 1'b1;
   reg [2:0] ctr;
   wire [2:0] end_step;
-  wire [7:0] part_sum;
-  wire [15:0] shifted_part_sum;
-  reg [7:0] a,b;
-  reg [15:0] part_res;
+  wire [23:0] part_sum;
+  wire [23:0] shifted_part_sum;
+  reg [7:0] b;
+  reg [15:0] a;
+  reg [23:0] part_res;
   reg state;
   
   assign part_sum = a&{16{b[ctr]}};
   assign shifted_part_sum=part_sum<<ctr;
-  assign end_step=(ctr==3’h7);
+  assign end_step=(ctr==3'h7);
   assign busy_o=state;
   
   always @(posedge clk_i)
@@ -64,9 +45,10 @@ module mlt(
 					if (end_step) begin
 						state <= IDLE;
 						y_bo <= part_res+shifted_part_sum;
+					end else begin
+					   part_res <= part_res+shifted_part_sum;
+					   ctr <= ctr+1;
 					end
-					part_res <= part_res+shifted_part_sum;
-					ctr <= ctr+1;
 				end
 		endcase
 	end

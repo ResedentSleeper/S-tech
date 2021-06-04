@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 04/08/2021 02:11:42 PM
-// Design Name: 
-// Module Name: func
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module func(
 	input clk_i,
@@ -53,11 +33,11 @@ module func(
 	.x_i(b),
 	.start_i(start_sqrt),
 	.busy_o(busy_sqrt),
-	.y_bo(result_sqrt)
+	.y_o(result_sqrt)
   );
   
   assign busy_o = state;
-  assign done = (busy_sqrt==0 && busy_cube==0 && (result_cube!=0 && a!=0 || result_cube==0 && a==0) && (result_sqrt!=0 && b!=0 || result_sqrt==0 && b==0);  
+  assign done = (busy_sqrt==0 && busy_cube==0 && (result_cube!=0 && a!=0 || result_cube==0 && a==0) && (result_sqrt!=0 && b!=0 || result_sqrt==0 && b==0));  
   
   always @(posedge clk_i)
     if (rst_i) begin
@@ -77,9 +57,13 @@ module func(
 			begin
 				if (done) begin
 					y_o <= result_cube+result_sqrt;
-				begin
+					state <= IDLE;
+				end
 			end
 	  endcase
+        if (start_i) begin
+          
+	  end
     end   
  always @(posedge clk_i) begin
 	if (busy_cube) begin

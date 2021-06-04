@@ -44,7 +44,7 @@ module func_tb;
 		.rst_i(rst_i),
 		.start_i(start_i),
 		.a_i(a_i),
-		.b_i(_i),
+		.b_i(b_i),
 		.busy_o(busy_o),
 		.y_o(y_o)
 	);
